@@ -8,35 +8,59 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
-	<meta name="description" content="">
-	<script src="assets/js/script.js"></script>
+	
+	<script src="https://kit.fontawesome.com/4a1a231342.js" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="./assets/style.css">
 </head>
-<body>
 
-	
+<body onload="onload()">
+
+<nav id="edition">
+	<div class="edition">
+		<div class="editionmode">
+			<a href="#modal1" title="Mode édition" class="js-modal">
+				<i class="fa-regular fa-pen-to-square fa-lg fontaColor" href="#modal1"></i>
+				<span href="#modal1">Mode édition</span>
+			</a>
+		</div>
+
+		<input type="button" value="publier les changement">
+	</div>
+</nav>
 
 <header>
 	<h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
 	<nav>
 		<ul>
-			<li>projets</li>
-			<li>contact</li>
-			<li>login</li>
+			<li>
+				<a class="color" href="#portfolio" title="projets">projets</a>
+			</li>
+			<li><a class="color" href="#contact" title="contact">contact</a></li>
+			<li><a id="loginButton" class="color" href="login.html" title="login">login</a></li>
+			<li><a id="logoutButton" class="color" href="index.html" title="logout" onclick="Logout()">logout</a></li>
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
 	</nav>
 </header>
+
 <main>
 	<section id="introduction">
 		<figure>
 			<img src="./assets/images/sophie-bluel.png" alt="">
 		</figure>
 		<article>
-			<h2>Designer d'espace</h2>
-			<p>Je raconte votre histoire, je valorise vos idées. Je vous accompagne de la conception à la livraison finale du chantier.</p>
-			<p>Chaque projet sera étudié en commun, de façon à mettre en valeur les volumes, les matières et les couleurs dans le respect de l’esprit des lieux et le choix adapté des matériaux. Le suivi du chantier sera assuré dans le souci du détail, le respect du planning et du budget.</p>
-			<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG, décorateur(trice)</p>
+			<div id="adminedit">
+				<a class="edit" href="#" title="edit">
+					<i class="fa-regular fa-pen-to-square"></i>
+					<span>modifier</span>
+				</a>
+			</div>
+			<div>
+				<h2>Designer d'espace</h2>
+				<p>Je raconte votre histoire, je valorise vos idées. Je vous accompagne de la conception à la livraison finale du chantier.</p>
+				<p>Chaque projet sera étudié en commun, de façon à mettre en valeur les volumes, les matières et les couleurs dans le respect de l’esprit des lieux et le choix adapté des matériaux. Le suivi du chantier sera assuré dans le souci du détail, le respect du planning et du budget.</p>
+				<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG, décorateur(trice)</p>
+			</div>
 		</article>
 	</section>
 
@@ -81,5 +105,31 @@
 	</nav>
 </footer>
 
+
+<aside id="modal1" class="modal" aria-hidden="true" role="dialog" aria-labelledby="titleModal" style="display:none;">
+	<div class="modal-wrapper js-modal-stop">
+		<div class="buttonModal">
+			<button class="js-modal-close"><i class="fa-solid fa-xmark fa-lg"></i></button>
+		</div>
+		<div class="content">
+
+			<div class="ModalTitle">
+				<span id="titleModal">Galerie photo</span>
+			</div>
+
+			<!-- Ici Galerie Photo a faire ! -->
+
+			<div class="border"></div>
+			<div class="ModalButton">
+				<input class="ButtonModal" type="submit" value="Ajouter une photo">
+			</div>
+			<div class="deleteAll">
+				<a href="#">Supprimer la galerie</a>
+			</div>
+		</div>
+
+	</div>
+</aside>
+<script src="assets/js/script.js"></script>
 </body>
 </html>
