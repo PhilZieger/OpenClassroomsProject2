@@ -1,4 +1,11 @@
 let modal = null
+let target2 = null
+
+function NextModale() {
+  var childFirst = document.getElementById("ModalChild1");
+  var parentFirst = document.getElementById("ModalParent");
+  parentFirst.removeChild(childFirst);
+}
 
 const openModal = function (e) {
   
@@ -10,7 +17,10 @@ const openModal = function (e) {
   modal = target
   modal.addEventListener('click', closeModal)
   modal.querySelector('.js-modal-close').addEventListener('click', closeModal)
+  modal.querySelector('.ButtonModal').addEventListener('click', openNewModal)
   modal.querySelector('.js-modal-stop').addEventListener('click', stopPropagation)
+
+  LoadModal();
 }
 
 const closeModal = function (e) {
@@ -21,8 +31,56 @@ const closeModal = function (e) {
   modal.removeAttribute('aria-modal')
   modal.removeEventListener('click', closeModal)
   modal.querySelector('.js-modal-close').removeEventListener('click', closeModal)
+  modal.querySelector('.ButtonModal').removeEventListener('click', closeModal)
   modal.querySelector('.js-modal-stop').removeEventListener('click', stopPropagation)
   modal = null
+}
+
+const closeModal2 = function (e) {
+  if (target2 === null) return
+  e.preventDefault() 
+  target2.style.display = "none"
+  target2.setAttribute('aria-hidden', 'true')
+  target2.removeAttribute('aria-modal')
+  target2.removeEventListener('click', closeModal2)
+  target2.querySelector('.js-modal-close2').removeEventListener('click', closeModal2)
+  target2.querySelector('.js-modal-stop2').removeEventListener('click', stopPropagation)
+  target2 = null
+}
+
+const openNewModal = function (e) {
+    
+    if (modal === null) return
+    e.preventDefault() 
+    modal.style.display = "none"
+    modal.setAttribute('aria-hidden', 'true')
+    modal.removeAttribute('aria-modal')
+    modal.removeEventListener('click', closeModal)
+    modal.querySelector('.js-modal-close').removeEventListener('click', closeModal)
+    modal.querySelector('.ButtonModal').removeEventListener('click', closeModal)
+    modal.querySelector('.js-modal-stop').removeEventListener('click', stopPropagation)
+    modal = null
+    
+    target2 = document.getElementById("modal2");
+    target2.style.display = null;
+    target2.removeAttribute('aria-hidden')
+    target2.setAttribute('aria-modal', 'true')
+
+    target2.addEventListener('click', closeModal2)
+    target2.querySelector('.js-modal-close2').addEventListener('click', closeModal2)
+    target2.querySelector('.js-modal-stop2').addEventListener('click', stopPropagation)
+
+    var selectqueryParent = document.getElementById("categories");
+    var selectqueryChildren = document.getElementById("Childrenforadd");
+
+    for (let i=window.categories.data.length-1; i>=0; i--){
+        console.log(window.categories.data[i]);
+      const NewOption = document.createElement("option");
+      NewOption.value = window.categories.data[i].id;
+      const textOption = document.createTextNode(window.categories.data[i].name);
+      NewOption.appendChild(textOption);
+      selectqueryParent.insertBefore(NewOption, selectqueryChildren.nextSibling);
+    }
 }
 
 const stopPropagation = function (e) {
@@ -34,6 +92,106 @@ document.querySelectorAll('.js-modal').forEach(a => {
   a.addEventListener('click', openModal)
 })
 
+
+function LoadModal() {
+
+  // get elements
+  var child = document.getElementById("figchildModal");
+  var parent = document.getElementById("content");
+
+  if (child == null) {
+    
+  } else {
+    // Delete child
+    parent.removeChild(child);
+  }
+
+  const newDivModal = document.createElement("div");
+  newDivModal.id = "figchildModal";
+  newDivModal.className = "galleryModal";
+  for (const work of window.works.data) {       
+    const newFigureModal = document.createElement("figure");
+    newFigureModal.className = ('figureModal');
+    newFigureModal.id = (work.id);
+    newDivModal.appendChild(newFigureModal);
+
+    const divAbsolute = document.createElement("div");
+    divAbsolute.className = ('abso');
+    
+    const newImageModal = document.createElement("img");
+    newImageModal.crossOrigin = "anonymous";
+    newImageModal.src = work['imageUrl'];
+    newImageModal.alt = work['title'];
+    divAbsolute.appendChild(newImageModal);
+    newFigureModal.appendChild(divAbsolute);
+
+
+    const newDeleteButtonModal = document.createElement("button");
+    newDeleteButtonModal.className = ('DeleteButton');
+    newDeleteButtonModal.onclick = function() {
+      RemoveWork(work['id']);
+    };
+    const ImgDelete = document.createElement("i");
+    ImgDelete.className = ('fa-solid fa-trash-can fa-sm colorModal');
+    newDeleteButtonModal.appendChild(ImgDelete);
+    divAbsolute.appendChild(newDeleteButtonModal);
+
+
+    const newfigcaptionModal = document.createElement("a");
+    newfigcaptionModal.className= "textModal";
+    const textModal = document.createTextNode("éditer");
+    newFigureModal.appendChild(newfigcaptionModal);
+    newfigcaptionModal.appendChild(textModal);   
+  }
+  const remoteParentElementModal = document.getElementById('content');
+  const originalDivModal = document.getElementById("border");
+  remoteParentElementModal.insertBefore(newDivModal, originalDivModal);
+
+}
+
+function RemoveWork(id) {
+  var token = recupererCookie('token');
+  console.log("Bearer " + token)
+  /*
+  user = JSON.stringify({
+      email: email,
+      password: password
+  })
+  */ 
+  fetch('http://localhost:5678/api/works/' + id , {
+    method: 'DELETE',
+    headers: {
+      accept: "*/*",
+      Authorization: "Bearer " + token
+    }
+  })
+  .then(response => {
+    return response
+  })
+  .then((data) => {
+    if (data.status == 200 || data.status == 204) {
+      console.log('Item Deleted');
+      //Remove Work in Modal
+      const WorkId = document.getElementById(id);
+      const WorkParent = document.getElementById('figchildModal');
+      WorkParent.removeChild(WorkId);
+      //Remove Work in Main Page
+      const WorkMainId = document.getElementById('Main' + id);
+      const WorkMainParent = document.getElementById('figchild');
+      WorkMainParent.removeChild(WorkMainId);
+
+      //Remove In Json
+      search = id;
+      RemoveJson = works.data.findIndex(seeIndex);
+      works.data.splice(RemoveJson, 1);
+
+    } else if (data.status == 401) {
+      console.log('Unauthorized');
+    } else if (data.status == 500) {
+      console.log('Unexpected Behaviour');
+    }
+  });
+}
 
 function onload() {
   if (window.fetch) {
@@ -49,10 +207,24 @@ function onload() {
         
       }));
 
+      fetch('http://localhost:5678/api/categories').then(response => 
+      response.json().then(data => ({
+        data: data,
+        status: response.status
+      })
+      ).then(res => {
+        categories = res;
+        
+      }));
+
   } else {
       // Faire quelque chose avec XMLHttpRequest?
   }
   
+}
+
+function seeIndex(value) {
+    return value.id == search;
 }
 
 function Logout() {
@@ -71,6 +243,8 @@ function loadAdminPage() {
     menuOut.style.display = 'contents';
     var ButtonEdit = document.getElementById('adminedit');
     ButtonEdit.style.display = 'contents';
+    var ButtonEdit2 = document.getElementById('adminedit2');
+    ButtonEdit2.style.display = 'contents';
   }
 }
 
@@ -88,7 +262,6 @@ async function loginuser(email, password) {
       body: user
     });
     let result = await response.json();
-    console.log(response.status);
     if (response.status == 200 ) {
       //Connected
       token = result.token;
@@ -98,7 +271,7 @@ async function loginuser(email, password) {
     } else if ( response.status == 401 || response.status == 404) {
       //Rong e-mail or password
       const remoteRongElement = document.getElementById('rong');
-      remoteRongElement.textContent = "Votre identifiant est incorrecte !";
+      remoteRongElement.textContent = "Erreur dans l’identifiant ou le mot de passe";
     }
 }
 
@@ -139,7 +312,6 @@ function ListingWorks(category) {
         
       } else {
         // Delete child
-        console.log(child);
         parent.removeChild(child);
       }
       
@@ -148,8 +320,8 @@ function ListingWorks(category) {
       newDiv.id = "figchild";
       newDiv.className = "gallery";
   for (const work of window.works.data) {
-      
       const newFigure = document.createElement("figure");
+      newFigure.id = ('Main' + work.id);
       newDiv.appendChild(newFigure);
       const newImage = document.createElement("img");
       newImage.crossOrigin = "anonymous";
@@ -225,7 +397,6 @@ function ListingWorks(category) {
     }
 
  
-      console.log(window.works.data[1])
       // get elements
       var child = document.getElementById("figchild");
       var parent = document.getElementById("gallery");
@@ -243,6 +414,7 @@ function ListingWorks(category) {
 
            
           const newFigure = document.createElement("figure");
+          newFigure.id = ('Main' + work.id);
           newDiv.appendChild(newFigure);
           const newImage = document.createElement("img");
           newImage.crossOrigin = "anonymous";

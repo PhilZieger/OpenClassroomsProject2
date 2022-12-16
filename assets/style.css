@@ -132,10 +132,6 @@ li:hover a{
 #introduction p {
 	margin-bottom: 0.5em;
 }
-#portfolio h2 {
-	text-align: center;
-	margin-bottom: 1em;
-}
 .gallery {
 	width: 100%;
 	display: grid;
@@ -319,7 +315,7 @@ footer li {
 .login #rong {
 	font-family: 'Syne';
 	font-weight: 700;
-	font-size: 20px;
+	font-size: 14px;
 	color: #ec0c0c;
 	font-weight: bold;
 	text-align: center;
@@ -400,8 +396,23 @@ footer li {
 #adminedit {
 	display: none;
 }
+#adminedit2 {
+	display: none;
+}
 
 .modal {
+	position: fixed;
+	margin: 0 auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.3);
+}
+.modal2 {
 	position: fixed;
 	margin: 0 auto;
 	display: flex;
@@ -421,16 +432,31 @@ footer li {
 	width: 630px;
 	max-width: calc(100vw - 20px);
 	max-height: calc(100vh - 20px);
-	padding: 36px;
 	background-color: #FFFFFF;
 	border-radius: 10px;
 }
 .buttonModal {
+	margin-top: 32px;
+	margin-bottom: 0px;
+	width: 95%;
 	display: flex;
 	flex-direction: row;
-	justify-content: flex-end;	
+	justify-content: flex-end;
 }
 .buttonModal button {
+	background-color: #ffffff;
+	border: none;
+}
+.buttonModal2 {
+	margin-top: 32px;
+	margin-bottom: 0px;
+	width: 90%;
+	padding: 0 30px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+.buttonModal2 button {
 	background-color: #ffffff;
 	border: none;
 }
@@ -447,11 +473,15 @@ footer li {
 	font-weight: 400;
 	font-size: 26px;
 	line-height: 30px;
+	margin-top: 0px;
+	margin-bottom: 46px;
 }
 .border {
 	width: 100%;
 	height: 0px;
 	border: 1px solid #B3B3B3;
+	margin-top: 47px;
+	margin-bottom: 18px;
 }
 .ButtonModal {
 	height: 36px;
@@ -463,6 +493,11 @@ footer li {
 	font-size: 14px;
 	line-height: 17px;
 	text-align: center;
+	border: none;
+}
+.content input[type="submit"]{
+	width: 237px;
+	margin : 20px auto ;
 }
 .ModalButton {
 	display: flex;
@@ -473,6 +508,8 @@ footer li {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
+	margin-top: 3px;
+	margin-bottom: 48px;
 }
 .deleteAll a {
 	font-family: 'Syne';
@@ -480,10 +517,74 @@ footer li {
 	font-weight: 400;
 	font-size: 14px;
 	line-height: 17px;
-	/* identical to box height */
-
-	text-align: center;
-
 	color: #D65353;
 }
-
+.figureModal {
+	display: flex;
+	flex-direction: column;
+}
+.abso {
+		display: flex;
+		flex-direction: column;
+		position: relative;
+}
+.textModal {
+	width: 20%;
+}
+.galleryModal figure {
+	width: 18.9%;
+}
+.galleryModal {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	gap: 10px 6px;
+}
+.ProjectBar {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	gap: 31px;
+	margin-top: 120px;
+	margin-bottom: 1em;
+}
+.DeleteButton {
+	position: absolute;
+    background: #000000;
+	border-radius: 4px;
+    top: 5%;
+    right: 5%;
+	width: 25%;
+	height: 20%;
+	display: flex;
+	flex-direction: center;
+	justify-content: center;
+	align-items: center;
+}
+.colorModal {
+	color: #FFFFFF;
+}
+.NewWorks {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 10px;
+}
+.NewWorks .text, .NewWorks select {
+	width: 100%;
+	height: 51px;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+.NewWorks span {
+	font-family: 'Work Sans';
+	font-style: normal;
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 16px;
+	color: #3D3D3D;
+	padding-top: 11px;
+	padding-bottom: 0px;
+}

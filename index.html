@@ -18,10 +18,8 @@
 <nav id="edition">
 	<div class="edition">
 		<div class="editionmode">
-			<a href="#modal1" title="Mode édition" class="js-modal">
-				<i class="fa-regular fa-pen-to-square fa-lg fontaColor" href="#modal1"></i>
-				<span href="#modal1">Mode édition</span>
-			</a>
+			<i class="fa-regular fa-pen-to-square fa-lg fontaColor" href="#modal1"></i>
+			<span href="#modal1">Mode édition</span>
 		</div>
 
 		<input type="button" value="publier les changement">
@@ -65,7 +63,15 @@
 	</section>
 
 	<section id="portfolio">
-		<h2>Mes Projets</h2>
+		<div class="ProjectBar">
+			<h2>Mes Projets</h2>
+			<div id="adminedit2" href="#modal1">
+			<a href="#modal1" title="Edit" class="js-modal edit">
+				<i href="#modal1" class="fa-regular fa-pen-to-square"></i>
+				<span href="#modal1">modifier</span>
+			</a>
+			</div>
+		</div>
 		<form class="filter">
 
 				<input id="all" type="button" class="button filterText" value="Tous" onclick="ListingWorks(0)">
@@ -107,29 +113,66 @@
 
 
 <aside id="modal1" class="modal" aria-hidden="true" role="dialog" aria-labelledby="titleModal" style="display:none;">
-	<div class="modal-wrapper js-modal-stop">
-		<div class="buttonModal">
-			<button class="js-modal-close"><i class="fa-solid fa-xmark fa-lg"></i></button>
+	<div id="ModalParent" class="modal-wrapper js-modal-stop">
+		
+			<div class="buttonModal">
+				<button class="js-modal-close"><i class="fa-solid fa-xmark fa-lg"></i></button>
+			</div>
+		<div id="ModalChild1" class="mainModale">
+			<div class="content" id='content'>
+
+				<div class="ModalTitle">
+					<span id="titleModal">Galerie photo</span>
+				</div>
+
+				<!-- Ici Galerie Photo a faire ! -->
+
+				<div class="border" id="border"></div>
+				<div class="ModalButton" href="#modal2">
+					<input class="ButtonModal" type="submit" value="Ajouter une photo">
+				</div>
+				<div class="deleteAll">
+					<a href="#">Supprimer la galerie</a>
+				</div>
+			</div>
 		</div>
-		<div class="content">
-
-			<div class="ModalTitle">
-				<span id="titleModal">Galerie photo</span>
-			</div>
-
-			<!-- Ici Galerie Photo a faire ! -->
-
-			<div class="border"></div>
-			<div class="ModalButton">
-				<input class="ButtonModal" type="submit" value="Ajouter une photo">
-			</div>
-			<div class="deleteAll">
-				<a href="#">Supprimer la galerie</a>
-			</div>
-		</div>
-
 	</div>
 </aside>
+
+<aside id="modal2" class="modal2" aria-hidden="true" role="dialog" aria-labelledby="titleModal" style="display:none;">
+	<div id="ModalParent" class="modal-wrapper js-modal-stop2">
+		
+			<div class="buttonModal2">
+				<button class="js-modal-return"><i class="fa-solid fa-arrow-left fa-lg"></i></button>
+				<button class="js-modal-close2"><i class="fa-solid fa-xmark fa-lg"></i></button>
+			</div>
+		<div id="ModalChild1" class="mainModale">
+			<div class="content" id='content'>
+
+				<div class="ModalTitle">
+					<span id="titleModal">Ajout photo</span>
+				</div>
+				<form action="#" class="NewWorks" id="NewWorks">
+					<!-- Photo a faire ici ainci que le system de post fetch de photo via token -->
+
+					<span>Titre</span>
+					<input type="text" name="title" class="text">
+					<span>Catégorie</span>
+					<select id="categories" name="categories">
+						<option id="Childrenforadd" value="error"></option>
+					</select>
+				</form>
+				
+
+				<div class="border" id="border"></div>
+				<div class="ModalButton" href="#modal2">
+					<input class="ButtonModal" type="submit" value="Valider">
+				</div>
+			</div>
+		</div>
+	</div>
+</aside>
+
 <script src="assets/js/script.js"></script>
 </body>
 </html>
