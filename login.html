@@ -32,13 +32,13 @@
 
     <section id="login">
         <h2>Log in</h2>
-        <form class="login">
+        <form id="LoginForm" action="#" class="login">
             <span id="rong"></span>
             <span>E-mail</span>
-            <input type="text" name="email" class="text">
+            <input id="email" type="text" name="email" class="text">
             <span>Mot de passe</span>
-            <input type="text" name="password" class="text">
-            <input type="button" value="Se connecter" class="connect" onclick="loginuser(email.value, password.value)">
+            <input id="password" type="text" name="password" class="text">
+            <input id="connectButton" class="connect" type="submit" value="Se connecter" onclick="LoginUser(email.value, password.value)">
             <a href="#" title="Mot de passe oublié" class="forgot">Mot de passe oublié</a>
         </form>
 

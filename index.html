@@ -13,7 +13,7 @@
 	<link rel="stylesheet" href="./assets/style.css">
 </head>
 
-<body onload="onload()">
+<body>
 
 <nav id="edition">
 	<div class="edition">
@@ -35,7 +35,7 @@
 			</li>
 			<li><a class="color" href="#contact" title="contact">contact</a></li>
 			<li><a id="loginButton" class="color" href="login.html" title="login">login</a></li>
-			<li><a id="logoutButton" class="color" href="index.html" title="logout" onclick="Logout()">logout</a></li>
+			<li ><a id="logoutButton" class="color" href="index.html" title="logout">logout</a></li>
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
 	</nav>
@@ -74,13 +74,13 @@
 		</div>
 		<form class="filter">
 
-				<input id="all" type="button" class="button filterText" value="Tous" onclick="ListingWorks(0)">
+				<input id="all" type="button" class="button filterText" value="Tous">
 
-				<input id="obj" type="button" class="button filterText" value="Objets" onclick="ListingWorks(1)">
+				<input id="obj" type="button" class="button filterText" value="Objets">
 
-				<input id="app" type="button" class="button filterText" value="Appartements" onclick="ListingWorks(2)">
+				<input id="app" type="button" class="button filterText" value="Appartements">
 
-				<input id="hotel" type="button" class="button filterText" value="Hôtel & restaurants" onclick="ListingWorks(3)">
+				<input id="hotel" type="button" class="button filterText" value="Hôtel & restaurants">
 				
 		</form>
 		<div id="gallery">
@@ -152,22 +152,33 @@
 				<div class="ModalTitle">
 					<span id="titleModal">Ajout photo</span>
 				</div>
-				<form action="#" class="NewWorks" id="NewWorks">
+				<form action="#" class="NewWorks" id="NewWorks" enctype="multipart/form-data">
 					<!-- Photo a faire ici ainci que le system de post fetch de photo via token -->
+					<div id="pictureModal" class="pictureModal">
+						<img id="ModalePic" src="https://www.svgrepo.com/show/13704/picture.svg" width="58" height="58" alt="Picture Logo">
+						<label id="ModaleLab" for="pictureModalInport" class="InputFile">
+							+ Ajouter photo
+							<input type="file" name="pict" id="pictureModalInport"
+							accept="image/png, image/jpeg" onchange="file_changed(this)">
+						</label>
+						
+						<span id="ModaleSpan">jpg, png : 4mo max</span>
+					</div>
 
-					<span>Titre</span>
-					<input type="text" name="title" class="text">
+					<span id="TitleModal2">Titre</span>
+					<input name="titleModalMenu" id="TitleModalSub" type="text" class="text">
 					<span>Catégorie</span>
 					<select id="categories" name="categories">
 						<option id="Childrenforadd" value="error"></option>
 					</select>
-				</form>
+				
 				
 
 				<div class="border" id="border"></div>
-				<div class="ModalButton" href="#modal2">
-					<input class="ButtonModal" type="submit" value="Valider">
+				<div class="ModalButton">
+					<input id="buttonModalDisabled" class="ButtonModal" type="submit" value="Valider" disabled>
 				</div>
+				</form>
 			</div>
 		</div>
 	</div>

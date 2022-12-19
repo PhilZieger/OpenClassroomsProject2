@@ -588,3 +588,43 @@ footer li {
 	padding-top: 11px;
 	padding-bottom: 0px;
 }
+.pictureModal {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 169px;
+	background: #E8F1F7;
+	border-radius: 3px;
+}
+.InputFile {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 173px;
+	height: 36px;
+	background: #CBD6DC;
+	border-radius: 50px;
+	margin-top: 20px;
+	margin-bottom: 0px;
+
+	font-family: 'Work Sans';
+	font-style: normal;
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 16px;
+	cursor: pointer;
+	color: #306685;
+}
+.pictureModal input {
+	display: none;
+}
+.ButtonModal:disabled,
+button[disabled]{
+	background: #A7A7A7;
+}
+.PictureResult {
+	max-width: 420px;
+	max-height: 169px;
+}

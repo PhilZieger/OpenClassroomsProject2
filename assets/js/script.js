@@ -70,16 +70,22 @@ const openNewModal = function (e) {
     target2.querySelector('.js-modal-close2').addEventListener('click', closeModal2)
     target2.querySelector('.js-modal-stop2').addEventListener('click', stopPropagation)
 
-    var selectqueryParent = document.getElementById("categories");
-    var selectqueryChildren = document.getElementById("Childrenforadd");
+    categoriesteset = document.getElementById("Objets");
+    
+    if ( categoriesteset == null ) {
+      var selectqueryParent = document.getElementById("categories");
+      var selectqueryChildren = document.getElementById("Childrenforadd");
 
-    for (let i=window.categories.data.length-1; i>=0; i--){
-        console.log(window.categories.data[i]);
-      const NewOption = document.createElement("option");
-      NewOption.value = window.categories.data[i].id;
-      const textOption = document.createTextNode(window.categories.data[i].name);
-      NewOption.appendChild(textOption);
-      selectqueryParent.insertBefore(NewOption, selectqueryChildren.nextSibling);
+      for (let i=window.categories.data.length-1; i>=0; i--){
+
+        const NewOption = document.createElement("option");
+        NewOption.value = window.categories.data[i].id;
+        NewOption.id = window.categories.data[i].name;
+        const textOption = document.createTextNode(window.categories.data[i].name);
+        NewOption.appendChild(textOption);
+        selectqueryParent.insertBefore(NewOption, selectqueryChildren.nextSibling);
+        
+      }
     }
 }
 
@@ -87,9 +93,31 @@ const stopPropagation = function (e) {
   e.stopPropagation()
 }
 
+function verif() {
+  var t = document.getElementById("TitleModalSub");
+  var c = document.getElementById("categories").value;
+  var i = document.getElementById("NewPictureID");
+    if ( i.src != "" && t.value != "" && c != "error") {
+      var b = document.getElementById("buttonModalDisabled");
+      buttonModalDisabled.disabled = false;
+    } else {
+      buttonModalDisabled.disabled = true;
+    }
+
+}
 
 document.querySelectorAll('.js-modal').forEach(a => {
   a.addEventListener('click', openModal)
+})
+
+document.querySelectorAll('#TitleModalSub').forEach(a => {
+  a.addEventListener('change', verif)
+})
+document.querySelectorAll('#categories').forEach(a => {
+  a.addEventListener('change', verif)
+})
+document.querySelectorAll('#pictureModalInport').forEach(a => {
+  a.addEventListener('change', verif)
 })
 
 
@@ -149,9 +177,92 @@ function LoadModal() {
 
 }
 
+
+document.querySelectorAll('#NewWorks').forEach(a => {
+  a.addEventListener('submit', CreateWork)
+})
+
+
+async function CreateWork (e) {
+  e.preventDefault();
+  console.log(this.titleModalMenu.value);
+  console.log(this.categories.value);
+  console.log(this.pict.files[0].name);
+  
+  var formData = new FormData();
+  var token = recupererCookie('token');
+  var photo = this.pict.files[0];
+  var title = this.titleModalMenu.value;
+  var categorie = this.categories.value;
+  var blob = new Blob([photo], { type: "image/jpeg"});
+  formData.append('image', blob);
+  formData.append('title', title);
+  formData.append('category', categorie);
+  console.log(formData);
+  let response = await fetch('http://localhost:5678/api/works', {
+      method: 'POST',
+      headers: {
+        accept: 'application/json',
+        Authorization: "Bearer " + token
+      },
+      body: formData,
+    });
+    let result = await response.json();
+}
+
+
+
+
+
+
+function file_changed(picture) {
+  var file = picture.files[0];
+  if(file.type.indexOf('image/') !== 0){
+    console.warn('not an image');
+    }
+  var NewPicture = URL.createObjectURL(file);
+
+
+
+  // var Picture = document.getElementById("ModalePic");
+  // Picture.style.display = 'none';
+
+  // var Lab = document.getElementById("ModaleLab");
+  // Lab.style.display = 'none';
+
+  // var Span = document.getElementById("ModaleSpan");
+  // Span.style.display = 'none';
+
+  var Picture = document.getElementById("pictureModal");
+  Picture.style.display = 'none';
+    
+    
+  const newDivModal2 = document.createElement("div");
+  newDivModal2.id = "pictureModal";
+  newDivModal2.className = "pictureModal";
+    
+  const newPictureInModal = document.createElement("img");
+  newPictureInModal.src = NewPicture;
+  newPictureInModal.className = "PictureResult";
+  newPictureInModal.alt = "Your works Pictures";
+  newPictureInModal.id = "NewPictureID";
+    
+  newDivModal2.appendChild(newPictureInModal);
+    
+  const remoteParentElementModal2 = document.getElementById('NewWorks');
+  const originalDivModal2 = document.getElementById("TitleModal2");
+  remoteParentElementModal2.insertBefore(newDivModal2, originalDivModal2);
+
+
+
+
+
+  
+
+}
+
 function RemoveWork(id) {
   var token = recupererCookie('token');
-  console.log("Bearer " + token)
   /*
   user = JSON.stringify({
       email: email,
@@ -170,7 +281,6 @@ function RemoveWork(id) {
   })
   .then((data) => {
     if (data.status == 200 || data.status == 204) {
-      console.log('Item Deleted');
       //Remove Work in Modal
       const WorkId = document.getElementById(id);
       const WorkParent = document.getElementById('figchildModal');
@@ -186,12 +296,17 @@ function RemoveWork(id) {
       works.data.splice(RemoveJson, 1);
 
     } else if (data.status == 401) {
-      console.log('Unauthorized');
+      //Unautorized
     } else if (data.status == 500) {
-      console.log('Unexpected Behaviour');
+      //Unexpected Behaviour
     }
   });
 }
+
+
+document.querySelectorAll('body').forEach(a => {
+  a.addEventListener('load', onload())
+})
 
 function onload() {
   if (window.fetch) {
@@ -202,8 +317,8 @@ function onload() {
       })
       ).then(res => {
         works = res;
-        ListingWorks(0);
-        loadAdminPage();
+        ListingWorks();
+        loadAdminPage(true);
         
       }));
 
@@ -227,28 +342,60 @@ function seeIndex(value) {
     return value.id == search;
 }
 
-function Logout() {
-  document.cookie = 'admin=; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-  document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-}
-
-function loadAdminPage() {
+function loadAdminPage(a) {
   //Load admin page if connected
-  if (recupererCookie("admin") == "true") {
+  if (a == true) {
+    if (recupererCookie("admin") == "true") {
+      var edition = document.getElementById('edition');
+      edition.style.display = 'contents';
+      var menuIn = document.getElementById('loginButton');
+      var menuOut = document.getElementById('logoutButton');
+      menuIn.style.display = 'none';
+      menuOut.style.display = 'contents';
+      var ButtonEdit = document.getElementById('adminedit');
+      ButtonEdit.style.display = 'contents';
+      var ButtonEdit2 = document.getElementById('adminedit2');
+      ButtonEdit2.style.display = 'contents';
+    }
+  } else {
     var edition = document.getElementById('edition');
-    edition.style.display = 'contents';
+    edition.style.display = 'none';
     var menuIn = document.getElementById('loginButton');
     var menuOut = document.getElementById('logoutButton');
-    menuIn.style.display = 'none';
-    menuOut.style.display = 'contents';
+    menuIn.style.display = 'contents';
+    menuOut.style.display = 'none';
     var ButtonEdit = document.getElementById('adminedit');
-    ButtonEdit.style.display = 'contents';
+    ButtonEdit.style.display = 'none';
     var ButtonEdit2 = document.getElementById('adminedit2');
-    ButtonEdit2.style.display = 'contents';
+    ButtonEdit2.style.display = 'none';
   }
+  
 }
 
-async function loginuser(email, password) {
+document.querySelectorAll('#logoutButton').forEach(a => {
+  a.addEventListener('click', Logout)
+})
+
+function Logout (e) {
+  e.preventDefault();
+    document.cookie = 'admin=; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+    loadAdminPage(false)
+}
+
+
+
+
+/*
+document.querySelectorAll('#LoginForm').forEach(a => {
+  a.addEventListener('submit', LoginUser)
+})
+*/
+
+async function LoginUser (email, password) {
+  // var email = this.email.value;
+  // var password = this.password.value;
+  
   user = JSON.stringify({
       email: email,
       password: password
@@ -273,6 +420,7 @@ async function loginuser(email, password) {
       const remoteRongElement = document.getElementById('rong');
       remoteRongElement.textContent = "Erreur dans l’identifiant ou le mot de passe";
     }
+    
 }
 
 function recupererCookie(nom) {
@@ -285,41 +433,102 @@ function recupererCookie(nom) {
   }
   return null;
 }
-function ListingWorks(category) {
 
-  if (category == 0 ) {
-      var all = document.getElementById('all');
-      all.style.background = '#1D6154';
-      all.style.color = '#FFFFFF';
+document.querySelectorAll('#all').forEach(a => {
+  a.addEventListener('click', ListingWorks)
+})
 
-      var all = document.getElementById('obj');
-      all.style.background = '#FFFFFF';
-      all.style.color = '#1D6154';
+document.querySelectorAll('#obj').forEach(a => {
+  a.addEventListener('click', ListingWorks)
+})
 
-      var all = document.getElementById('app');
-      all.style.background = '#FFFFFF';
-      all.style.color = '#1D6154';
-      
-      var all = document.getElementById('hotel');
-      all.style.background = '#FFFFFF';
-      all.style.color = '#1D6154';
+document.querySelectorAll('#app').forEach(a => {
+  a.addEventListener('click', ListingWorks)
+})
 
-      // get elements
-      var child = document.getElementById("figchild");
-      var parent = document.getElementById("gallery");
+document.querySelectorAll('#hotel').forEach(a => {
+  a.addEventListener('click', ListingWorks)
+})
 
-      if (child == null) {
-        
-      } else {
-        // Delete child
-        parent.removeChild(child);
-      }
-      
+function ShowWorkMenu(button) {
 
-      const newDiv = document.createElement("div");
-      newDiv.id = "figchild";
-      newDiv.className = "gallery";
+  var all = document.querySelectorAll('#all')[0];
+  var obj = document.querySelectorAll('#obj')[0];
+  var app = document.querySelectorAll('#app')[0];
+  var hotel = document.querySelectorAll('#hotel')[0];
+  if (button == 'obj') {
+    obj.style.background = '#1D6154';
+    obj.style.color = '#FFFFFF';  
+    all.style.background = '#FFFFFF';
+    all.style.color = '#1D6154';
+    app.style.background = '#FFFFFF';
+    app.style.color = '#1D6154';
+    hotel.style.background = '#FFFFFF';
+    hotel.style.color = '#1D6154';
+
+  } else if (button == 'app') {
+    app.style.background = '#1D6154';
+    app.style.color = '#FFFFFF';  
+    all.style.background = '#FFFFFF';
+    all.style.color = '#1D6154';
+    obj.style.background = '#FFFFFF';
+    obj.style.color = '#1D6154';
+    hotel.style.background = '#FFFFFF';
+    hotel.style.color = '#1D6154';
+  } else if (button == 'hotel') {
+    hotel.style.background = '#1D6154';
+    hotel.style.color = '#FFFFFF';  
+    all.style.background = '#FFFFFF';
+    all.style.color = '#1D6154';
+    obj.style.background = '#FFFFFF';
+    obj.style.color = '#1D6154';
+    app.style.background = '#FFFFFF';
+    app.style.color = '#1D6154';
+  } else {
+    all.style.background = '#1D6154';
+    all.style.color = '#FFFFFF';  
+    hotel.style.background = '#FFFFFF';
+    hotel.style.color = '#1D6154';
+    obj.style.background = '#FFFFFF';
+    obj.style.color = '#1D6154';
+    app.style.background = '#FFFFFF';
+    app.style.color = '#1D6154';
+  }
+}
+
+function RemovePage () {
+  // get elements
+  var child = document.getElementById("figchild");
+  var parent = document.getElementById("gallery");
+
+  if (child == null) {
+    
+  } else {
+    // Delete child
+    parent.removeChild(child);
+  }
+}
+
+function UpdatePage (c) {
+  const newDiv = document.createElement("div");
+  newDiv.id = "figchild";
+  newDiv.className = "gallery";
+  if (c == "obj") {
+    category = "1";
+    filter = true;
+  } else if (c == "app") {
+    category = "2";
+    filter = true;
+  } else if (c == "hotel") {
+    category = "3";
+    filter = true;
+  } else {
+    category = null;
+    filter = false;
+  }
+
   for (const work of window.works.data) {
+    if ( work['categoryId'] == category && filter ) {
       const newFigure = document.createElement("figure");
       newFigure.id = ('Main' + work.id);
       newDiv.appendChild(newFigure);
@@ -332,107 +541,35 @@ function ListingWorks(category) {
       const text = document.createTextNode(work['title']);
       newFigure.appendChild(newfigcaption);
       newfigcaption.appendChild(text);
-
-      
-    
-
+    } else if ( filter == false ) {
+      const newFigure = document.createElement("figure");
+      newFigure.id = ('Main' + work.id);
+      newDiv.appendChild(newFigure);
+      const newImage = document.createElement("img");
+      newImage.crossOrigin = "anonymous";
+      newImage.src = work['imageUrl'];
+      newImage.alt = work['title'];
+      newFigure.appendChild(newImage);
+      const newfigcaption = document.createElement("figcaption");
+      const text = document.createTextNode(work['title']);
+      newFigure.appendChild(newfigcaption);
+      newfigcaption.appendChild(text);
+    }
   }
 
-    const remoteParentElement = document.getElementById('gallery');
-    const originalDiv = document.getElementById("children");
-    remoteParentElement.insertBefore(newDiv, originalDiv);
+  const remoteParentElement = document.getElementById('gallery');
+  const originalDiv = document.getElementById("children");
+  remoteParentElement.insertBefore(newDiv, originalDiv);
+}
 
-
+function ListingWorks (e) {
+  RemovePage();
+  if (e) {
+    e.preventDefault()
+    ShowWorkMenu(e.path[0].id);
+    UpdatePage(e.path[0].id);
   } else {
-
-
-    if ( category == 1 ) {
-      var all = document.getElementById('all');
-      all.style.background = '#FFFFFF';
-      all.style.color = '#1D6154';
-
-      var all = document.getElementById('obj');
-      all.style.background = '#1D6154';
-      all.style.color = '#FFFFFF';
-
-      var all = document.getElementById('app');
-      all.style.background = '#FFFFFF';
-      all.style.color = '#1D6154';
-      
-      var all = document.getElementById('hotel');
-      all.style.background = '#FFFFFF';
-      all.style.color = '#1D6154';
-    } else if ( category == 2 ) {
-      var all = document.getElementById('all');
-      all.style.background = '#FFFFFF';
-      all.style.color = '#1D6154';
-
-      var all = document.getElementById('obj');
-      all.style.background = '#FFFFFF';
-      all.style.color = '#1D6154';
-
-      var all = document.getElementById('app');
-      all.style.background = '#1D6154';
-      all.style.color = '#FFFFFF';
-      
-      var all = document.getElementById('hotel');
-      all.style.background = '#FFFFFF';
-      all.style.color = '#1D6154';
-    } else if ( category == 3 ) {
-      var all = document.getElementById('all');
-      all.style.background = '#FFFFFF';
-      all.style.color = '#1D6154';
-
-      var all = document.getElementById('obj');
-      all.style.background = '#FFFFFF';
-      all.style.color = '#1D6154';
-
-      var all = document.getElementById('app');
-      all.style.background = '#FFFFFF';
-      all.style.color = '#1D6154';
-      
-      var all = document.getElementById('hotel');
-      all.style.background = '#1D6154';
-      all.style.color = '#FFFFFF';
-    }
-
- 
-      // get elements
-      var child = document.getElementById("figchild");
-      var parent = document.getElementById("gallery");
-
-      // Delete child
-      parent.removeChild(child);
-
-
-      const newDiv = document.createElement("div");
-          newDiv.id = "figchild";
-          newDiv.className = "gallery";
-      for (const work of window.works.data) {
-          
-        if ( work['categoryId'] == category ) {
-
-           
-          const newFigure = document.createElement("figure");
-          newFigure.id = ('Main' + work.id);
-          newDiv.appendChild(newFigure);
-          const newImage = document.createElement("img");
-          newImage.crossOrigin = "anonymous";
-          newImage.src = work['imageUrl'];
-          newImage.alt = work['title'];
-          newFigure.appendChild(newImage);
-          const newfigcaption = document.createElement("figcaption");
-          const text = document.createTextNode(work['title']);
-          newFigure.appendChild(newfigcaption);
-          newfigcaption.appendChild(text);
-
-          }
-        
-
-      }
-
-        const remoteParentElement = document.getElementById('gallery');
-        const originalDiv = document.getElementById("children");
-        remoteParentElement.insertBefore(newDiv, originalDiv);
+    UpdatePage();
+    ShowWorkMenu();
   }
 }
