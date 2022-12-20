@@ -66,7 +66,7 @@
 		<div class="ProjectBar">
 			<h2>Mes Projets</h2>
 			<div id="adminedit2" href="#modal1">
-			<a href="#modal1" title="Edit" class="js-modal edit">
+			<a id="adminEdit" href="#modal1" title="Edit" class="js-modal edit">
 				<i href="#modal1" class="fa-regular fa-pen-to-square"></i>
 				<span href="#modal1">modifier</span>
 			</a>
@@ -159,9 +159,8 @@
 						<label id="ModaleLab" for="pictureModalInport" class="InputFile">
 							+ Ajouter photo
 							<input type="file" name="pict" id="pictureModalInport"
-							accept="image/png, image/jpeg" onchange="file_changed(this)">
+							accept="image/png, image/jpeg">
 						</label>
-						
 						<span id="ModaleSpan">jpg, png : 4mo max</span>
 					</div>
 
