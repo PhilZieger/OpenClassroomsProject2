@@ -180,6 +180,8 @@ async function CreateWork (e) {
     categoryId: result.categoryId,
     userId: result.userId
   })
+
+  console.log(works.data)
   LoadModal()
   ListingWorks()
 
@@ -506,8 +508,9 @@ function ListingWorks (e) {
   if (queueUrl !== 'login.html') {
     if (e) {
       e.preventDefault()
-      ShowWorkMenu(e.path[0].id)
-      UpdatePage(e.path[0].id)
+      ShowWorkMenu(e.target.id)
+      UpdatePage(e.target.id)
+      console.log(works.data)
     } else {
       UpdatePage()
       ShowWorkMenu()

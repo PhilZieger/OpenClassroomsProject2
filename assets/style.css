@@ -628,3 +628,14 @@ button[disabled]{
 	max-width: 420px;
 	max-height: 169px;
 }
+
+#introduction figure {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	gap: 16px;
+}
+
+#introduction a {
+	margin-left: 57px;
+}
