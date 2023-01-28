@@ -309,6 +309,8 @@ function loadAdminPage (a) {
       ButtonEdit.style.display = 'contents'
       const ButtonEdit2 = document.querySelector('#adminedit2')
       ButtonEdit2.style.display = 'contents'
+      const ButtonEdit3 = document.querySelector('#adminedit3')
+      ButtonEdit3.style.display = 'contents'
     }
   } else {
     const edition = document.querySelector('#edition')
@@ -321,6 +323,8 @@ function loadAdminPage (a) {
     ButtonEdit.style.display = 'none'
     const ButtonEdit2 = document.querySelector('#adminedit2')
     ButtonEdit2.style.display = 'none'
+    const ButtonEdit3 = document.querySelector('#adminedit3')
+    ButtonEdit3.style.display = 'none'
   }
 }
 
